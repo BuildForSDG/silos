@@ -5,22 +5,18 @@ barebones setup for JavaScript / Node projects replace this with a one-liner phr
 
 ## About
 
-What is this project about. Ok to enrich here or the section above it with an image. 
+Silos is  a project aimed at doubling productivity of small scale food producers by providing acces to an ecommerce market place where they can showcase their produce, connect with retailers and financial institutions willing to offer grants and loan facilities.
 
-Once this repo has been setup on Codacy by the TTL, replace the above badge with the actual one from the Codacy dashboard, and add the code coverage badge as well. This is mandatory
-
-This is a simple JavaScript starter repo template for setting up your project. The setup contains
-
-- Jest: For runnung tests. We strongly recommend that JavaScript projects use Jest
-
-- Eslint & Prettier: For formatting code to match ESlint AirBnB coding standard. You might need to install the ESlint and Prettier plugins for your code editor to make the most of these utilities
 
 ## Why
 
-Talk about what problem this solves, what SDG(s) and SGD targets it addresses and why these are imoirtant
+This project solves:
+- The issue of producers not having acess to large market
+- Producers not being able to easily access financial services (grants and loans)
+- Producers not being reached by eligible retailers
 
 ## Usage
- How would someone use what you have built, include URLs to the deployed app, service e.t.c when you have it setup
+ Url
 
 
 ## Setup
@@ -46,7 +42,8 @@ This starter uses [Parcel](https://parceljs.org/getting_started.html) as the bun
 
 ## Authors
 
-List the team behind this project. Their names linked to their Github, LinkedIn, or Twitter accounts should siffice. Ok to signify the role they play in the project, including the TTL and mentor
+- Godwin Otokina (Technical Team Lead) https://github.com/wincodes https://twitter.com/GodwinOtokina
+-
 
 ## Contributing
 If this project sounds interesting to you and you'd like to contribute, thank you!
@@ -57,11 +54,7 @@ First, you can send a mail to buildforsdg@andela.com to indicate your interest, 
 
 ## Acknowledgements
 
-Did you use someone else’s code?
-Do you want to thank someone explicitly?
-Did someone’s blog post spark off a wonderful idea or give you a solution to nagging problem?
 
-It's powerful to always give credit.
 
 ## LICENSE
 MIT
