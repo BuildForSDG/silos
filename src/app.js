@@ -1,14 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
 import routes from './routes';
 // import sequelize from './config/sequelize';
-import path from 'path';
 
 
-//initialize express
+// initialize express
 const app = express();
 
-//allow requests from cross origin
+// allow requests from cross origin
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   next();
 });
 
-//body parser middleware
+// body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -34,10 +34,10 @@ app.use(bodyParser.json());
 //     console.error('Unable to connect to the database:', err);
 //   });
 
-//api docs route
+// api docs route
 app.use('/api/v1/apidocs', express.static(path.join(__dirname, '../docs')));
 
 app.use('/api/v1', routes);
 
-//export the app for testing
+// export the app for testing
 export default app;
