@@ -21,6 +21,17 @@
     "start": "babel-node --presets es2015 ./src/index.js",
     "docs": "apidoc -i src/ -o docs/"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint",
+      "git add"
+    ]
+  },
   "author": {
     "name": "Build For SDG",
     "email": "buildforsdg@andela.com"
@@ -54,7 +65,9 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
     "jest": "^25.4.0",
+    "lint-staged": "^10.2.2",
     "nodemon": "^2.0.3",
     "parcel-bundler": "^1.12.4",
     "sequelize-cli": "^5.5.1",
