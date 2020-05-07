@@ -1,13 +1,35 @@
-import app from '../src/index';
+process.env.NODE_ENV = 'test';
+import app from '../src/app';
+import supertest from 'supertest';
+import http from 'http';
 
-describe('app module', () => {
-  test('it exists', async () => {
-    expect(app).toBeDefined();
+
+describe('basic test', () => {
+  let server;
+  let request;
+
+  beforeAll((done) => {
+    server = http.createServer(app);
+    server.listen(done);
+    request = supertest(server);
   });
 
-  test('it returns program name with SDGs', async () => {
-    const result = await app();
-    const sdgPos = (result || '').indexOf('SDG');
-    expect(sdgPos).toBeGreaterThanOrEqual(0);
+  afterAll((done) => {
+    server.close(done);
+  });
+
+  test('it should return status of 200', async done => {
+    const res = await request.get('/api/v1');
+
+    expect(res.status).toBe(200);
+    done();
+  });
+
+  test('it returns project name', async done => {
+    const res = await request.get('/api/v1');
+
+    expect(res.body.status).toBe('success');
+    expect(res.body.data.message).toBe('BuildForSdg Silos Api')
+    done();
   });
 });
