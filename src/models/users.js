@@ -1,5 +1,8 @@
-module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Users', {
+import Sequelize from 'sequelize';
+
+/* eslint-disable no-unused-vars */
+export default (sequelize, DataTypes) => {
+  const User = sequelize.define('Users', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -44,15 +47,11 @@ module.exports = {
     },
     photo: {
       type: Sequelize.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE
     }
-  }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('Users') // eslint-disable-line no-unused-vars
+  });
+  // User.associate = function (models) {
+  //   // associations can be defined here
+  // };
+  return User;
 };
+/* eslint-disable no-unused-vars */
