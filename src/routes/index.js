@@ -33,6 +33,60 @@ router.get('/', (req, res, next) => {
 });
 /* eslint-disable no-unused-vars */
 
+/**
+ * @api {post} /api/v1/auth/register Register a new user
+ * @apiName RegisterUser
+ * @apiGroup User
+ *
+ * @apiParam {String} firstName User first name
+ * @apiParam {String} lastName User last name
+ * @apiParam {String} email User email, must be unique
+ * @apiParam {String} password User password
+ * @apiParam {String} phone User contact phone number
+ * @apiParam {String} userType Type of user, could be producer, retailer, financial institution
+ * @apiParam {String} businessName User's business name
+ * @apiParam {String} bio Biography of business
+ * @apiParam {String} address Business address
+ * @apiParam {File} photo User photograph
+ *
+ * @apiParamExample Sample body:
+ * HTTP/1.1 201 Created
+ * {
+ *  "firstName":"John",
+ *  "lastName":"Doe",
+ *  "email":"johndoe@mymail.com",
+ *  "password":"johndoe",
+ *  "phoneNumber":"098654321",
+ *  "userType":"Producer",
+ *  "businessName":"My Business",
+ *  "bio":"My business biography",
+ *  "address":"No 2 Lokoja Stree, Abuja. FCT",
+ *  "photo": File
+ * }
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "User created successfully",
+ *     "userId": 1
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "data": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+
 /* eslint-disable no-unused-vars */
 // Register new users
 router.post('/auth/register', (req, res, next) => {
