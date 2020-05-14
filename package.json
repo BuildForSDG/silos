@@ -13,7 +13,7 @@
     "test": "__tests__"
   },
   "scripts": {
-    "test": "sequelize db:migrate --env test && jest --detectOpenHandles && sequelize db:migrate:undo:all --env test",
+    "test": "sequelize db:migrate --env test && jest --runInBand --detectOpenHandles && sequelize db:migrate:undo:all --env test",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
     "lint": "eslint \"src/**/*.js\" . --fix",
@@ -55,8 +55,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "multer": "^1.4.2",
-    "mysql2": "^2.1.0",
-    "pg": "^8.0.3",
+    "pg": "^8.2.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.7"
   },

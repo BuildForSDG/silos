@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 
+require('dotenv').config();
+
 const defaultDbConn = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -18,7 +20,8 @@ const conn = process.env.NODE_ENV === 'test' ? testDbConn : defaultDbConn;
 
 const sequelize = new Sequelize(conn.database, conn.user, conn.password, {
   host: conn.host,
-  dialect: process.env.DIALECT /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
+  dialect: process.env.DIALECT /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+  logging: false
 });
 
 export default sequelize;
