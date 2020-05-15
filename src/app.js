@@ -26,16 +26,15 @@ app.use(bodyParser.json());
 app.use(fileupload({ useTempFiles: true }));
 
 // test sequelize db connection
-/**
- sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err);
-  });
- */
+
+// sequelize
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connection has been established successfully.');
+//   })
+//   .catch(err => {
+//     console.error('Unable to connect to the database:', err);
+//   });
 
 // api docs route
 app.use('/api/v1/apidocs', express.static(path.join(__dirname, '../docs')));

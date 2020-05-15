@@ -88,21 +88,55 @@ export const getLandingPage = (req, res, next) => {
 /* eslint-disable no-unused-vars */
 // Register new users
 export const registerNewUser = (req, res, next) => {
-  const uploadImage = req.files.photo;
+  let image;
+  let uploadImage;
+  let imgUrl = '';
+
+  // Check if the user attach an image or not
+  if (req.files) {
+    uploadImage = req.files.photo;
+  }
 
   const {
     firstName, lastName, email, password, phoneNumber, userType, businessName, bio, address
   } = req.body;
-  sequelize
-    .sync()
-    .then(() => cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
+
+  // Check if given email is already in use
+  User.findOne({ where: { email } })
+    .then((check) => {
+      if (check) {
+        return res.status(403).json({
+          status: 'error',
+          data: {
+            message: `User with the email: ${email} already exist`
+          }
+        });
+      }
+      return check;
+    })
+    .catch((err) => res.status(500).json({
+      status: 'error',
+      data: {
+        message: err
+      }
+    }));
+
+  // Check if an image is present in the photo filed before uploading to cloudinary
+  if (uploadImage) {
+    image = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
       if (err) {
-        console.log(err);
+        return err;
       }
       return result;
-    }))
-    .then((image) => {
-      const imgUrl = image.url;
+    });
+  }
+
+  sequelize
+    .sync()
+    .then(() => {
+      if (image) {
+        imgUrl = image.url;
+      }
       // Generate hashed password and store along with other user data
       bcrypt.hash(password, 10, (err, hashed) => {
         if (err) {
