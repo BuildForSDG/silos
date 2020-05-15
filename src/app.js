@@ -4,7 +4,7 @@ import path from 'path';
 import fileupload from 'express-fileupload';
 // import { process } from 'ipaddr.js';
 import routes from './routes';
-import sequelize from './config/sequelize';
+// import sequelize from './config/sequelize';
 
 // initialize express
 const app = express();
@@ -26,7 +26,8 @@ app.use(bodyParser.json());
 app.use(fileupload({ useTempFiles: true }));
 
 // test sequelize db connection
-sequelize
+/**
+ sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
@@ -34,6 +35,7 @@ sequelize
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
+ */
 
 // api docs route
 app.use('/api/v1/apidocs', express.static(path.join(__dirname, '../docs')));
