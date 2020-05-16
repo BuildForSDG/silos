@@ -22,7 +22,6 @@ describe('User Registration Test', () => {
 
   test('it should validate user input and return 400 if fields are missing', async (done) => {
     const newUser = {
-      lastName: 'Doe',
       email: 'johndoe2@mymail.com',
       password: 'hashed',
       phoneNumber: '0987657',
@@ -36,7 +35,34 @@ describe('User Registration Test', () => {
 
     expect(result.statusCode).toEqual(400);
     expect(result.body.status).toBe('error');
-    expect(result.body.data).toHaveProperty('message', result.body.data.message);
+    expect(result.body.data).toMatchObject({
+      message: 'missing field',
+      error: [{ firstName: 'firstName is required' }, { lastName: 'lastName is required' }]
+    });
+    done();
+  });
+
+  test('it should validate wrong email format and return 400 ', async (done) => {
+    const newUser = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'johndoe',
+      password: 'hashed',
+      phoneNumber: '0987657',
+      userType: 'Producer',
+      businessName: 'My Biz Name',
+      bio: 'My Biography',
+      address: 'FT Abuja, Nigeria'
+    };
+
+    const result = await request.post('/api/v1/auth/register').send(newUser);
+
+    expect(result.statusCode).toEqual(400);
+    expect(result.body.status).toBe('error');
+    expect(result.body.data).toMatchObject({
+      message: 'missing field',
+      error: [{ email: 'email is required, make sure it is in the pattern yourmailname@domain.com' }]
+    });
     done();
   });
 

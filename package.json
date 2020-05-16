@@ -13,7 +13,7 @@
     "test": "__tests__"
   },
   "scripts": {
-    "test": "sequelize db:migrate --env test && jest --runInBand --detectOpenHandles && sequelize db:migrate:undo:all --env test",
+    "test": "sequelize db:migrate --env test && jest --detectOpenHandles && sequelize db:migrate:undo:all --env test",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
     "lint": "eslint \"src/**/*.js\" . --fix",

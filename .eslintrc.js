@@ -16,7 +16,6 @@ module.exports = {
   },
   rules: {
     'comma-dangle': ['error', 'never'],
-    'no-param-reassign': ['error', { props: false }],
-    'no-console': 'off'
+    'no-param-reassign': ['error', { props: false }]
   }
 };
