@@ -2,10 +2,7 @@
   "name": "js-starter",
   "version": "0.0.1",
   "description": "A boilerplate for starting js code",
-  "keywords": [
-    "js-starter",
-    "boilerplate"
-  ],
+  "keywords": ["js-starter", "boilerplate"],
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,9 +24,7 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "npm run lint"
-    ]
+    "*.js": ["npm run lint"]
   },
   "author": {
     "name": "Build For SDG",
@@ -55,6 +50,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "express-validator": "^6.4.1",
+    "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "pg": "^8.2.0",
     "pg-hstore": "^2.3.3",
@@ -76,7 +72,5 @@
     "sequelize-cli": "^5.5.1",
     "supertest": "^4.0.2"
   },
-  "browserslist": [
-    "last 1 Chrome versions"
-  ]
+  "browserslist": ["last 1 Chrome versions"]
 }

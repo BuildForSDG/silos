@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import cloudinary from 'cloudinary';
+import jwt from 'jsonwebtoken';
 import sequelize from '../config/sequelize';
 
 const User = sequelize.import('../models/users');
@@ -182,3 +183,97 @@ export const registerNewUser = (req, res, next) => {
     });
 };
 /* eslint-disable no-unused-vars */
+
+/**
+ *
+ * @api {post} /api/v1/auth/signin Login an existing user
+ * @apiName LoginUser
+ * @apiGroup User
+ *
+ * @apiParam {String} email User email
+ * @apiParam {String} password User password
+ *
+ * @apiParamExample Sample body:
+ * HTTP/1.1 200 OK
+ * {
+ *  "email":"johndoe@mymail.com",
+ *  "password":"johndoe",
+ * }
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Authentication successful",
+ *     "token": "b3hv34kjkj34m4m.5m6h6o.67k87n5h3u3n3b4n5n67kjkbsdkjfjgjfkgfjfhj."
+ *   }
+ * }
+ *
+ * @apiError Authentication Failed
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 401 Unauthorized
+ * {
+ *    "status": "error",
+ *    "data": {
+ *      "message":"Authentication Failed"
+ *    }
+ * }
+ */
+
+export const userSignin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Check if given user email is in database
+  User.findOne({ where: { email } })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({
+          status: 'error',
+          data: {
+            message: 'Authentication Failed'
+          }
+        });
+      }
+
+      // If found in database decode password from database and compare with one given
+      bcrypt.compare(password, user.dataValues.password, (err, response) => {
+        if (err) {
+          return res.status(401).json({
+            status: 'error',
+            message: 'Authentication Failed'
+          });
+        }
+
+        // Generate token if password matches above
+        if (response) {
+          const { responseId, responseEmail } = user.dataValues;
+          const token = jwt.sign({ email: responseEmail, id: responseId }, process.env.JWT_KEY, {
+            expiresIn: '24hr'
+          });
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'Authentication Successful',
+              token
+            }
+          });
+        }
+
+        return res.status(401).json({
+          status: 'error',
+          message: 'Authentication Failed'
+        });
+      });
+      return true;
+    })
+    .catch((err) => {
+      res.status(500).json({
+        status: 'error',
+        data: {
+          message: err
+        }
+      });
+    });
+};

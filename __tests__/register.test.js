@@ -16,6 +16,15 @@ describe('User Registration Test', () => {
     jest.setTimeout(10 * 1000);
   });
 
+  beforeEach((done) => {
+    /**
+     * Suppress console warning for each test
+     * Reference: https://stackoverflow.com/questions/44467657/jest-better-way-to-disable-console-inside-unit-tests
+     */
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    done();
+  });
+
   afterAll((done) => {
     server.close(done);
   });
@@ -112,7 +121,7 @@ describe('User Registration Test', () => {
     done();
   });
 
-  test('it should return 403 is a user with that email already exists', async (done) => {
+  test('it should return 403 if a user with that email already exists', async (done) => {
     const newUser = {
       firstName: 'John',
       lastName: 'Doe',
@@ -129,6 +138,34 @@ describe('User Registration Test', () => {
 
     expect(result.statusCode).toEqual(403);
     expect(result.body.status).toBe('error');
+
+    done();
+  });
+
+  test('it should login an existing user with the correct email and password', async (done) => {
+    const loginDetails = {
+      email: 'johndoe2@mymail.com',
+      password: 'hashed'
+    };
+
+    const login = await request.post('/api/v1/auth/signin').send(loginDetails);
+
+    expect(login.statusCode).toEqual(200);
+    expect(login.body.status).toBe('success');
+
+    done();
+  });
+
+  test('it should throw an authentication error with the wrong email and/or password', async (done) => {
+    const loginDetails2 = {
+      email: 'johndoe@mymail.com',
+      password: '1234'
+    };
+
+    const login2 = await request.post('/api/v1/auth/signin').send(loginDetails2);
+
+    expect(login2.statusCode).toEqual(401);
+    expect(login2.body.status).toBe('error');
 
     done();
   });
