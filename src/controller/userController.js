@@ -248,10 +248,16 @@ export const userSignin = (req, res, next) => {
 
         // Generate token if password matches above
         if (response) {
-          const { responseId, responseEmail } = user.dataValues;
-          const token = jwt.sign({ email: responseEmail, id: responseId }, process.env.JWT_KEY, {
-            expiresIn: '24hr'
-          });
+          const token = jwt.sign(
+            {
+              email: user.dataValues.email,
+              id: user.dataValues.id
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: '24hr'
+            }
+          );
           return res.status(200).json({
             status: 'success',
             data: {
