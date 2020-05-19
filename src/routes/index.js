@@ -1,25 +1,10 @@
 import express from 'express';
+import { getLandingPage, registerNewUser } from '../controller/userController';
+import { userValidationRules, validate } from '../middleware/validator';
 
 const router = express.Router();
 
-
-/**
- * @api {get} /api/v1 Api Landing Route
- * @apiName Landing
- * @apiGroup Api
- *
- *
- * @apiSuccess {String} status Status of the request.
- * @apiSuccess {Object} body  Body of the response.
- */
-
-router.get('/', (req, res) => {
-  res.json({
-    status: 'success',
-    data: {
-      message: 'BuildForSdg Silos Api'
-    }
-  });
-});
+router.get('/', getLandingPage);
+router.post('/auth/register', userValidationRules(), validate, registerNewUser);
 
 export default router;

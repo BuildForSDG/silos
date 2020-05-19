@@ -4,7 +4,6 @@ import app from '../src/app';
 
 process.env.NODE_ENV = 'test';
 
-
 describe('basic test', () => {
   let server;
   let request;
@@ -13,6 +12,7 @@ describe('basic test', () => {
     server = http.createServer(app);
     server.listen(done);
     request = supertest(server);
+    jest.setTimeout(10 * 1000);
   });
 
   afterAll((done) => {

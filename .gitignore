@@ -105,3 +105,6 @@ dist
 
 # documentaton
 docs
+
+# temporary folder for storing uploaded image
+tmp

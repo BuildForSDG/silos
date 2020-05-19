@@ -1,6 +1,6 @@
-
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Tests', {
+    // this is just a test migration
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -8,13 +8,17 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     firstName: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     lastName: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true
     },
     createdAt: {
       allowNull: false,
