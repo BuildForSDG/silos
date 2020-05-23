@@ -2,7 +2,10 @@
   "name": "js-starter",
   "version": "0.0.1",
   "description": "A boilerplate for starting js code",
-  "keywords": ["js-starter", "boilerplate"],
+  "keywords": [
+    "js-starter",
+    "boilerplate"
+  ],
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +19,9 @@
     "lint": "eslint \"src/**/*.js\" . --fix",
     "dev": "nodemon --exec babel-node --presets es2015 ./src/index.js",
     "start": "babel-node --presets es2015 ./src/index.js",
-    "docs": "apidoc -i src/ -o docs/"
+    "docs": "apidoc -i src/ -o docs/",
+    "test-migrate": " sequelize db:migrate --env test",
+    "test-migrate-rollback": "sequelize db:migrate:undo:all --env test"
   },
   "husky": {
     "hooks": {
@@ -24,7 +29,9 @@
     }
   },
   "lint-staged": {
-    "*.js": ["npm run lint"]
+    "*.js": [
+      "npm run lint"
+    ]
   },
   "author": {
     "name": "Build For SDG",
@@ -44,6 +51,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "bcrypt": "^4.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.21.0",
     "dotenv": "^8.2.0",
@@ -61,6 +69,7 @@
     "@babel/preset-env": "^7.9.5",
     "babel-jest": "^25.4.0",
     "babel-register": "^6.26.0",
+    "chance": "^1.1.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
@@ -72,5 +81,7 @@
     "sequelize-cli": "^5.5.1",
     "supertest": "^4.0.2"
   },
-  "browserslist": ["last 1 Chrome versions"]
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
 }

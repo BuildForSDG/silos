@@ -113,7 +113,65 @@ export const registerNewUser = (req, res, next) => {
           }
         });
       }
-      return check;
+
+      // Check if an image is present in the photo filed before uploading to cloudinary
+      if (uploadImage) {
+        image = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
+          if (err) {
+            return err;
+          }
+          return result;
+        });
+      }
+
+      sequelize
+        .sync()
+        .then(() => {
+          if (image) {
+            imgUrl = image.url;
+          }
+          // Generate hashed password and store along with other user data
+          bcrypt.hash(password, 10, (err, hashed) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'error',
+                data: {
+                  message: err
+                }
+              });
+            }
+            return User.build({
+              firstName,
+              lastName,
+              email,
+              password: hashed,
+              phoneNumber,
+              userType,
+              businessName,
+              bio,
+              address,
+              photo: imgUrl
+            })
+              .save()
+              .then((user) => {
+                const { id } = user.dataValues;
+                res.status(201).json({
+                  status: 'success',
+                  data: {
+                    message: 'User created successfully',
+                    userId: id
+                  }
+                });
+              });
+          });
+        })
+        .catch((err) => res.status(500).json({
+          status: 'error',
+          data: {
+            message: err
+          }
+        }));
+      return true;
     })
     .catch((err) => res.status(500).json({
       status: 'error',
@@ -121,66 +179,6 @@ export const registerNewUser = (req, res, next) => {
         message: err
       }
     }));
-
-  // Check if an image is present in the photo filed before uploading to cloudinary
-  if (uploadImage) {
-    image = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
-      if (err) {
-        return err;
-      }
-      return result;
-    });
-  }
-
-  sequelize
-    .sync()
-    .then(() => {
-      if (image) {
-        imgUrl = image.url;
-      }
-      // Generate hashed password and store along with other user data
-      bcrypt.hash(password, 10, (err, hashed) => {
-        if (err) {
-          return res.status(500).json({
-            status: 'error',
-            data: {
-              message: err
-            }
-          });
-        }
-        return User.build({
-          firstName,
-          lastName,
-          email,
-          password: hashed,
-          phoneNumber,
-          userType,
-          businessName,
-          bio,
-          address,
-          photo: imgUrl
-        })
-          .save()
-          .then((user) => {
-            const { id } = user.dataValues;
-            res.status(201).json({
-              status: 'success',
-              data: {
-                message: 'User created successfully',
-                userId: id
-              }
-            });
-          });
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        status: 'error',
-        data: {
-          message: err
-        }
-      });
-    });
 };
 /* eslint-disable no-unused-vars */
 
@@ -228,21 +226,28 @@ export const userSignin = (req, res, next) => {
   // Check if given user email is in database
   User.findOne({ where: { email } })
     .then((user) => {
-      if (!user) {
-        return res.status(401).json({
+      if (user === null) {
+        return res.status(404).json({
           status: 'error',
           data: {
-            message: 'Authentication Failed'
+            message: `user with email ${email} does not exist`
           }
         });
       }
 
       // If found in database decode password from database and compare with one given
       bcrypt.compare(password, user.dataValues.password, (err, response) => {
-        if (err) {
+        if (err !== undefined) {
+          return res.status(500).json({
+            status: 'error',
+            message: 'An error occurred on comaparing password'
+          });
+        }
+
+        if (response === false) {
           return res.status(401).json({
             status: 'error',
-            message: 'Authentication Failed'
+            message: 'Authentication Failed: Wrong Password'
           });
         }
 
