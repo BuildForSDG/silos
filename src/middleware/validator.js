@@ -30,6 +30,16 @@ export const userValidationRules = () => [
   body('photo').optional()
 ];
 
+export const loginValidationRules = () => [
+  body('email', 'email is required, make sure it is in the pattern yourmailname@domain.com')
+    .isEmail()
+    .not()
+    .isEmpty(),
+  body('password', 'password is required')
+    .not()
+    .isEmpty()
+];
+
 export const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {

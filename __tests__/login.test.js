@@ -36,9 +36,37 @@ describe('User Registration Test', () => {
     address: chance.address()
   };
 
-  //   test('it should return 400 if username or password is empty');
+  test('it should return 400 if username or password is empty', async (done) => {
+    const res = await request.post('/api/v1/auth/signin').send({});
 
-  //   test('it should return 404 error if email does not exist');
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.status).toBe('error');
+    expect(res.body.data).toMatchObject({
+      message: 'missing field',
+      error: [
+        { email: 'email is required, make sure it is in the pattern yourmailname@domain.com' },
+        { email: 'email is required, make sure it is in the pattern yourmailname@domain.com' },
+        { password: 'password is required' }
+      ]
+    });
+    done();
+  });
+
+  test('it should return 404 error if email does not exist', async (done) => {
+    const res = await request.post('/api/v1/auth/signin').send({
+      email: 'otokinaodafe@gmal.com',
+      password: 'password'
+    });
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toMatchObject({
+      status: 'error',
+      data: {
+        message: 'user with email otokinaodafe@gmal.com does not exist'
+      }
+    });
+    done();
+  });
 
   test('it should login an existing user with the correct email and password and return token', async (done) => {
     const user = await userFactory.createUser(userDetails);
