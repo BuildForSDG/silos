@@ -1,6 +1,6 @@
-const { body, validationResult } = require('express-validator');
+import { body, validationResult } from 'express-validator';
 
-const userValidationRules = () => [
+export const userValidationRules = () => [
   body('firstName', 'firstName is required')
     .not()
     .isEmpty(),
@@ -30,7 +30,17 @@ const userValidationRules = () => [
   body('photo').optional()
 ];
 
-const validate = (req, res, next) => {
+export const loginValidationRules = () => [
+  body('email', 'email is required, make sure it is in the pattern yourmailname@domain.com')
+    .isEmail()
+    .not()
+    .isEmpty(),
+  body('password', 'password is required')
+    .not()
+    .isEmpty()
+];
+
+export const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();
@@ -48,7 +58,7 @@ const validate = (req, res, next) => {
   });
 };
 
-module.exports = { userValidationRules, validate };
+// module.exports = { userValidationRules, validate };
 
 /**
  * References:

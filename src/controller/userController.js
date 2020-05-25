@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import cloudinary from 'cloudinary';
+import jwt from 'jsonwebtoken';
 import sequelize from '../config/sequelize';
 
 const User = sequelize.import('../models/users');
@@ -112,7 +113,65 @@ export const registerNewUser = (req, res, next) => {
           }
         });
       }
-      return check;
+
+      // Check if an image is present in the photo filed before uploading to cloudinary
+      if (uploadImage) {
+        image = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
+          if (err) {
+            return err;
+          }
+          return result;
+        });
+      }
+
+      sequelize
+        .sync()
+        .then(() => {
+          if (image) {
+            imgUrl = image.url;
+          }
+          // Generate hashed password and store along with other user data
+          bcrypt.hash(password, 10, (err, hashed) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'error',
+                data: {
+                  message: err
+                }
+              });
+            }
+            return User.build({
+              firstName,
+              lastName,
+              email,
+              password: hashed,
+              phoneNumber,
+              userType,
+              businessName,
+              bio,
+              address,
+              photo: imgUrl
+            })
+              .save()
+              .then((user) => {
+                const { id } = user.dataValues;
+                res.status(201).json({
+                  status: 'success',
+                  data: {
+                    message: 'User created successfully',
+                    userId: id
+                  }
+                });
+              });
+          });
+        })
+        .catch((err) => res.status(500).json({
+          status: 'error',
+          data: {
+            message: err
+          }
+        }));
+      return true;
     })
     .catch((err) => res.status(500).json({
       status: 'error',
@@ -120,57 +179,105 @@ export const registerNewUser = (req, res, next) => {
         message: err
       }
     }));
+};
+/* eslint-disable no-unused-vars */
 
-  // Check if an image is present in the photo filed before uploading to cloudinary
-  if (uploadImage) {
-    image = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
-      if (err) {
-        return err;
-      }
-      return result;
-    });
-  }
+/**
+ *
+ * @api {post} /api/v1/auth/signin Login an existing user
+ * @apiName LoginUser
+ * @apiGroup User
+ *
+ * @apiParam {String} email User email
+ * @apiParam {String} password User password
+ *
+ * @apiParamExample Sample body:
+ * HTTP/1.1 200 OK
+ * {
+ *  "email":"johndoe@mymail.com",
+ *  "password":"johndoe",
+ * }
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Authentication successful",
+ *     "token": "b3hv34kjkj34m4m.5m6h6o.67k87n5h3u3n3b4n5n67kjkbsdkjfjgjfkgfjfhj."
+ *   }
+ * }
+ *
+ * @apiError Authentication Failed
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 401 Unauthorized
+ * {
+ *    "status": "error",
+ *    "data": {
+ *      "message":"Authentication Failed"
+ *    }
+ * }
+ */
 
-  sequelize
-    .sync()
-    .then(() => {
-      if (image) {
-        imgUrl = image.url;
+export const userSignin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Check if given user email is in database
+  User.findOne({ where: { email } })
+    .then((user) => {
+      if (user === null) {
+        return res.status(404).json({
+          status: 'error',
+          data: {
+            message: `user with email ${email} does not exist`
+          }
+        });
       }
-      // Generate hashed password and store along with other user data
-      bcrypt.hash(password, 10, (err, hashed) => {
-        if (err) {
+
+      // If found in database decode password from database and compare with one given
+      bcrypt.compare(password, user.dataValues.password, (err, response) => {
+        if (err !== undefined) {
           return res.status(500).json({
             status: 'error',
+            message: 'An error occurred on comaparing password'
+          });
+        }
+
+        if (response === false) {
+          return res.status(401).json({
+            status: 'error',
+            message: 'Authentication Failed: Wrong Password'
+          });
+        }
+
+        // Generate token if password matches above
+        if (response) {
+          const token = jwt.sign(
+            {
+              email: user.dataValues.email,
+              id: user.dataValues.id
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: '24hr'
+            }
+          );
+          return res.status(200).json({
+            status: 'success',
             data: {
-              message: err
+              message: 'Authentication Successful',
+              token
             }
           });
         }
-        return User.build({
-          firstName,
-          lastName,
-          email,
-          password: hashed,
-          phoneNumber,
-          userType,
-          businessName,
-          bio,
-          address,
-          photo: imgUrl
-        })
-          .save()
-          .then((user) => {
-            const { id } = user.dataValues;
-            res.status(201).json({
-              status: 'success',
-              data: {
-                message: 'User created successfully',
-                userId: id
-              }
-            });
-          });
+
+        return res.status(401).json({
+          status: 'error',
+          message: 'Authentication Failed'
+        });
       });
+      return true;
     })
     .catch((err) => {
       res.status(500).json({
@@ -181,4 +288,3 @@ export const registerNewUser = (req, res, next) => {
       });
     });
 };
-/* eslint-disable no-unused-vars */
