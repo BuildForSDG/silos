@@ -334,7 +334,7 @@ export const getUserProfile = async (req, res, next) => {
   try {
     // Find the user by primary key.
     const user = await User.findByPk(userId);
-    return res.status(404).json({
+    return res.status(200).json({
       status: 'success',
       data: {
         message: 'User found',
