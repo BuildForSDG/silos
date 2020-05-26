@@ -291,7 +291,7 @@ export const userSignin = (req, res, next) => {
 
 /**
  *
- * @api {post} /api/v1/users/:userId Login an existing user
+ * @api {get} /api/v1/users/:userId View profile of a user
  * @apiName ViewUserProfile
  * @apiGroup User
  *
@@ -300,7 +300,7 @@ export const userSignin = (req, res, next) => {
  * {
  *   "status": "success",
  *  "data": {
- *     "message": "Authentication successful",
+ *     "message": "User found",
  *     "user": {
  *        "firstName":"John",
  *        "lastName":"Doe",
@@ -324,7 +324,7 @@ export const userSignin = (req, res, next) => {
  *    "status": "error",
  *    "data": {
  *      "message":"Authentication Failed",
- *      error: "Error information"
+ *      "error": "Error information"
  *    }
  * }
  */
@@ -334,10 +334,20 @@ export const getUserProfile = async (req, res, next) => {
   try {
     // Find the user by primary key.
     const user = await User.findByPk(userId);
-    return res.status(200).json({
-      status: 'success',
+
+    if (user) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'User found',
+          user
+        }
+      });
+    }
+    return res.status(404).json({
+      status: 'error',
       data: {
-        message: 'User found',
+        message: 'User does not exist.',
         user
       }
     });
