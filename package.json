@@ -18,7 +18,7 @@
     "test:cover": "jest --coverage",
     "lint": "eslint \"src/**/*.js\" . --fix",
     "dev": "nodemon --exec babel-node --presets es2015 ./src/index.js",
-    "start": "babel-node --presets es2015 ./src/index.js",
+    "start": "apidoc -i src/ -o docs/ && babel-node --presets es2015 ./src/index.js",
     "docs": "apidoc -i src/ -o docs/",
     "test-migrate": " sequelize db:migrate --env test",
     "test-migrate-rollback": "sequelize db:migrate:undo:all --env test"

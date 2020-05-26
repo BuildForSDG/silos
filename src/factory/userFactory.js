@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import sequelize from '../config/sequelize';
 
 const User = sequelize.import('../models/users');
@@ -26,4 +27,21 @@ const userCount = async () => {
   return count;
 };
 
-export default { createUser, userCount };
+const generateUserToken = async (user) => {
+  const { id, email } = user;
+
+  const token = await jwt.sign(
+    {
+      email,
+      id
+    },
+    process.env.JWT_KEY,
+    {
+      expiresIn: '24hr'
+    }
+  );
+
+  return token;
+};
+
+export default { createUser, userCount, generateUserToken };
