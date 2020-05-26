@@ -52,4 +52,27 @@ describe('User Profile Test', () => {
     expect(res.body.data.message).toBe('User found');
     done();
   });
+
+  test('it should prevent access for unauthorized users', async (done) => {
+    // the user details
+    const userDetails = {
+      firstName: chance.first(),
+      lastName: chance.last(),
+      email: chance.email(),
+      password: 'dhye%$&6*',
+      phoneNumber: chance.phone(),
+      userType: 'producer',
+      businessName: chance.name(),
+      bio: chance.sentence(),
+      address: chance.address()
+    };
+
+    const registerResponse = await request.post('/api/v1/auth/register').send(userDetails);
+
+    const res = await request.get(`/api/v1/users/${registerResponse.body.data.userId}`);
+
+    expect(res.statusCode).toEqual(403);
+    expect(res.body.message).toBe('Access denied');
+    done();
+  });
 });
