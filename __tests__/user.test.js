@@ -46,14 +46,10 @@ describe('User Profile Test', () => {
     const loginResponse = await request.post('/api/v1/auth/signin').send(loginDetails);
 
     const res = await request.get(`/api/v1/users/${registerResponse.body.data.userId}`).set('Authorization', `Bearer ${loginResponse.body.data.token}`);
-    const res2 = await request.get('/api/v1/users/10000').set('Authorization', `Bearer ${loginResponse.body.data.token}`);
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.status).toBe('success');
-    expect(res.body.data.message).toBe('User found');
-    expect(res2.statusCode).toEqual(404);
-    expect(res2.body.status).toBe('error');
-    expect(res2.body.data.message).toBe('User does not exist.');
+    expect(res.body.data.user).toBeTruthy();
     done();
   });
 
@@ -84,7 +80,7 @@ describe('User Profile Test', () => {
 
     expect(res.statusCode).toEqual(404);
     expect(res.body.status).toBe('error');
-    expect(res.body.data.message).toBe('User does not exist.');
+    expect(res.body.error.message).toBe('User does not exist.');
     done();
   });
 

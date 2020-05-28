@@ -339,22 +339,20 @@ export const getUserProfile = async (req, res, next) => {
       return res.status(200).json({
         status: 'success',
         data: {
-          message: 'User found',
           user
         }
       });
     }
     return res.status(404).json({
       status: 'error',
-      data: {
-        message: 'User does not exist.',
-        user
+      error: {
+        message: 'User does not exist.'
       }
     });
   } catch (error) {
     return res.status(500).json({
       status: 'error',
-      data: {
+      error: {
         message: 'Internal Server error',
         error
       }
