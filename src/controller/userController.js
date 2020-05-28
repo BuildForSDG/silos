@@ -333,7 +333,27 @@ export const getUserProfile = async (req, res, next) => {
   const { userId } = req.params;
   try {
     // Find the user by primary key.
-    const user = await User.findByPk(userId);
+    const user = await User.findOne(
+      {
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'phoneNumber',
+          'userType',
+          'businessName',
+          'bio',
+          'address',
+          'photo'
+        ]
+      },
+      {
+        where: {
+          id: userId
+        }
+      }
+    );
 
     if (user) {
       return res.status(200).json({

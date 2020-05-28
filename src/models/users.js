@@ -52,15 +52,6 @@ export default (sequelize, DataTypes) => {
   // User.associate = function (models) {
   //   // associations can be defined here
   // };
-  // User.prototype.toJSON = function () {
-  //   // eslint-disable-next-line func-name
-  //   const values = { ...this.get() };
-
-  //   // Remove password field from responses.
-  //   delete values.password;
-
-  //   return values;
-  // };
 
   return User;
 };
