@@ -82,9 +82,9 @@ describe('User Registration Test', () => {
     // Get path to sample image stored in testImage folder
     const filePath = await path.join(__dirname, './testImage/testImage.jpg');
     const newUser = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@mymail.com',
+      firstName: chance.first(),
+      lastName: chance.last(),
+      email: chance.email(),
       password: 'hashed',
       phoneNumber: '0987657',
       userType: 'Producer',
@@ -93,16 +93,12 @@ describe('User Registration Test', () => {
       address: 'FT Abuja, Nigeria'
     };
 
-    const result = await request
-      .post('/api/v1/auth/register')
-      .field(newUser)
-      .attach('photo', `${filePath}`);
+    const result = await request.post('/api/v1/auth/register').field(newUser).attach('photo', `${filePath}`);
     expect(result.statusCode).toEqual(201);
     expect(result.body.status).toBe('success');
     expect(result.body.data).toHaveProperty('userId', result.body.data.userId);
     done();
   });
-
 
   const newUser = {
     firstName: chance.first(),

@@ -286,3 +286,92 @@ export const userSignin = (req, res, next) => {
       });
     });
 };
+
+/**
+ *
+ * @api {get} /api/v1/users/:userId View profile of a user
+ * @apiName ViewUserProfile
+ * @apiGroup User
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "User found",
+ *     "user": {
+ *        "firstName":"John",
+ *        "lastName":"Doe",
+ *        "email":"johndoe@mymail.com",
+ *        "password":"johndoe",
+ *        "phoneNumber":"098654321",
+ *        "userType":"Producer",
+ *        "businessName":"My Business",
+ *        "bio":"My business biography",
+ *        "address":"No 2 Lokoja Stree, Abuja. FCT",
+ *        "photo": 'http://link-to-file'
+ *      }
+ *   }
+ * }
+ *
+ * @apiError Authentication Failed
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 401 Unauthorized
+ * {
+ *    "status": "error",
+ *    "data": {
+ *      "message":"Authentication Failed",
+ *      "error": "Error information"
+ *    }
+ * }
+ */
+
+export const getUserProfile = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    // Find the user by primary key.
+    const user = await User.findOne(
+      {
+        where: {
+          id: userId
+        },
+        attributes: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'phoneNumber',
+          'userType',
+          'businessName',
+          'bio',
+          'address',
+          'photo'
+        ]
+      }
+    );
+
+    if (user) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          user: user.dataValues
+        }
+      });
+    }
+    return res.status(404).json({
+      status: 'error',
+      error: {
+        message: 'User does not exist.'
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      error: {
+        message: 'Internal Server error',
+        error
+      }
+    });
+  }
+};

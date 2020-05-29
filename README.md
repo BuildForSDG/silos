@@ -51,6 +51,7 @@ Always specify the environments
 ## Authors
 
 - Godwin Otokina (Technical Team Lead) https://github.com/wincodes https://twitter.com/GodwinOtokina
+- Manasseh Omachonu https://github.com/manaraph https://twitter.com/manaraph225
 -
 
 ## Contributing
