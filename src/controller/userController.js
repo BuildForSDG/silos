@@ -335,6 +335,9 @@ export const getUserProfile = async (req, res, next) => {
     // Find the user by primary key.
     const user = await User.findOne(
       {
+        where: {
+          id: userId
+        },
         attributes: [
           'id',
           'firstName',
@@ -347,11 +350,6 @@ export const getUserProfile = async (req, res, next) => {
           'address',
           'photo'
         ]
-      },
-      {
-        where: {
-          id: userId
-        }
       }
     );
 
@@ -359,7 +357,7 @@ export const getUserProfile = async (req, res, next) => {
       return res.status(200).json({
         status: 'success',
         data: {
-          user
+          user: user.dataValues
         }
       });
     }
