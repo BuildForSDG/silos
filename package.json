@@ -16,11 +16,12 @@
     "test": "sequelize db:migrate --env test && jest --detectOpenHandles && sequelize db:migrate:undo:all --env test",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
-    "lint": "eslint \"src/**/*.js\" . --fix",
+    "lint": "eslint \"src/**/*.js\" .",
+    "lint:fix": "eslint \"src/**/*.js\" . --fix",
     "dev": "nodemon --exec babel-node --presets es2015 ./src/index.js",
     "start": "babel-node --presets es2015 ./src/index.js",
     "docs": "apidoc -i src/ -o docs/",
-    "test-migrate": " sequelize db:migrate --env test",
+    "test-migrate": "sequelize db:migrate --env test",
     "test-migrate-rollback": "sequelize db:migrate:undo:all --env test"
   },
   "husky": {
@@ -30,7 +31,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint"
+      "npm run lint:fix"
     ]
   },
   "author": {
