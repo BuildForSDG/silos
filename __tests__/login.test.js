@@ -40,14 +40,12 @@ describe('User Registration Test', () => {
     const res = await request.post('/api/v1/auth/signin').send({});
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.status).toBe('error');
-    expect(res.body.data).toMatchObject({
-      message: 'missing field',
-      error: [
-        { email: 'email is required, make sure it is in the pattern yourmailname@domain.com' },
-        { email: 'email is required, make sure it is in the pattern yourmailname@domain.com' },
-        { password: 'password is required' }
-      ]
+    expect(res.body).toMatchObject({
+      status: 'error',
+      errors: {
+        email: 'email is required, make sure it is in the pattern yourmailname@domain.com',
+        password: 'password is required'
+      }
     });
     done();
   });
@@ -61,7 +59,7 @@ describe('User Registration Test', () => {
     expect(res.statusCode).toEqual(404);
     expect(res.body).toMatchObject({
       status: 'error',
-      data: {
+      errors: {
         message: 'user with email otokinaodafe@gmal.com does not exist'
       }
     });
@@ -95,7 +93,7 @@ describe('User Registration Test', () => {
 
     expect(res.statusCode).toEqual(401);
     expect(res.body.status).toBe('error');
-    expect(res.body.message).toBe('Authentication Failed: Wrong Password');
+    expect(res.body.errors.message).toBe('Authentication Failed: Wrong Password');
     done();
   });
 });

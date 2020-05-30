@@ -102,8 +102,11 @@ describe('User Profile Test', () => {
 
     const res = await request.get(`/api/v1/users/${registerResponse.body.data.userId}`);
 
-    expect(res.statusCode).toEqual(403);
-    expect(res.body.message).toBe('Access denied');
+    expect(res.statusCode).toEqual(401);
+    expect(res.body).toMatchObject({
+      status: 'error',
+      errors: { message: 'Unauthenticated User' }
+    });
     done();
   });
 });

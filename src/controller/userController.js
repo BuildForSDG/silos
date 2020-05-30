@@ -4,6 +4,11 @@ import jwt from 'jsonwebtoken';
 import sequelize from '../config/sequelize';
 
 const User = sequelize.import('../models/users');
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET
+});
 /**
  * @api {get} /api/v1 Api Landing Route
  * @apiName Landing
@@ -13,13 +18,6 @@ const User = sequelize.import('../models/users');
  * @apiSuccess {String} status Status of the request.
  * @apiSuccess {Object} body  Body of the response.
  */
-
-//  Cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
-});
 
 /* eslint-disable no-unused-vars */
 export const getLandingPage = (req, res, next) => {
@@ -79,7 +77,7 @@ export const getLandingPage = (req, res, next) => {
  * HTTP/1.1 500 Server error
  * {
  *    "status": "error",
- *    "data": {
+ *    "errors": {
  *      "message":"error message"
  *    }
  * }
@@ -108,7 +106,7 @@ export const registerNewUser = (req, res, next) => {
       if (check) {
         return res.status(403).json({
           status: 'error',
-          data: {
+          errors: {
             message: `User with the email: ${email} already exist`
           }
         });
@@ -135,7 +133,7 @@ export const registerNewUser = (req, res, next) => {
             if (err) {
               return res.status(500).json({
                 status: 'error',
-                data: {
+                errors: {
                   message: err
                 }
               });
@@ -167,7 +165,7 @@ export const registerNewUser = (req, res, next) => {
         })
         .catch((err) => res.status(500).json({
           status: 'error',
-          data: {
+          errors: {
             message: err
           }
         }));
@@ -175,7 +173,7 @@ export const registerNewUser = (req, res, next) => {
     })
     .catch((err) => res.status(500).json({
       status: 'error',
-      data: {
+      errors: {
         message: err
       }
     }));
@@ -229,7 +227,7 @@ export const userSignin = (req, res, next) => {
       if (user === null) {
         return res.status(404).json({
           status: 'error',
-          data: {
+          errors: {
             message: `user with email ${email} does not exist`
           }
         });
@@ -240,14 +238,14 @@ export const userSignin = (req, res, next) => {
         if (err !== undefined) {
           return res.status(500).json({
             status: 'error',
-            message: 'An error occurred on comaparing password'
+            errors: { message: 'An error occurred on comaparing password' }
           });
         }
 
         if (response === false) {
           return res.status(401).json({
             status: 'error',
-            message: 'Authentication Failed: Wrong Password'
+            errors: { message: 'Authentication Failed: Wrong Password' }
           });
         }
 
@@ -274,7 +272,7 @@ export const userSignin = (req, res, next) => {
 
         return res.status(401).json({
           status: 'error',
-          message: 'Authentication Failed'
+          errors: 'Authentication Failed'
         });
       });
       return true;
@@ -282,7 +280,7 @@ export const userSignin = (req, res, next) => {
     .catch((err) => {
       res.status(500).json({
         status: 'error',
-        data: {
+        errors: {
           message: err
         }
       });
