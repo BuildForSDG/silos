@@ -149,7 +149,7 @@ export const createProduct = async (req, res) => {
 /* eslint-disable radix */
 /* eslint-disable no-unused-expressions */
 export const getProducts = async (req, res) => {
-  let { page } = req.params;
+  let { page } = req.query;
 
   !page || parseInt(page) <= 1 ? page = 0 : page = parseInt(page) - 1;
 
