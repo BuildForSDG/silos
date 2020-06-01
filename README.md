@@ -37,6 +37,7 @@ Migrations are saved in the /src/migrations folder
 - Create a migration and model with `$ sequelize model:generate --name Test2 --attributes firstName:string,lastName:string,email:string`
 - Run all migrations with `$ sequelize db:migrate --env development`
 - Rollback all migrations with `$ sequelize db:migrate:undo:all --env development`
+- Run database seed with `$ sequelize-cli db:seed:all`
 Always specify the environments
 
 #### Hints
