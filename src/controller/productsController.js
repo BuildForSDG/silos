@@ -157,19 +157,17 @@ export const getProducts = async (req, res) => {
   const offset = Number(page * limit);
 
   try {
-    const totalProducts = await Product.count();
-
-    const products = await Product.findAll({ offset, limit });
+    const products = await Product.findAndCountAll({ offset, limit });
 
     if (products) {
       return res.status(200).json({
         status: 'success',
         data: {
-          message: 'Only Producers can create products',
-          products,
+          message: 'Product query Successful',
+          products: products.rows,
           currentPage: page + 1,
           rowsPerPage: limit,
-          totalProducts
+          totalProducts: products.count
         }
       });
     }
