@@ -368,7 +368,7 @@ export const getUserProfile = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       status: 'error',
-      error: {
+      errors: {
         message: 'Internal Server error',
         error
       }

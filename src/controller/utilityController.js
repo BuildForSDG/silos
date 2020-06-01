@@ -65,14 +65,14 @@ export const getCategories = async (req, res) => {
     }
     return res.status(404).json({
       status: 'error',
-      error: {
+      errors: {
         message: 'Categories not found.'
       }
     });
   } catch (error) {
     return res.status(500).json({
       status: 'error',
-      error: {
+      errors: {
         message: 'Internal Server error',
         error
       }
