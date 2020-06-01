@@ -151,6 +151,8 @@ describe('User Registration Test', () => {
     done();
   });
 
+  // you can always comment out this test to prevent uploading image on every test
+
   test('it should create the product with an image and return the product_id', async (done) => {
     const userDetails = {
       firstName: chance.first(),
