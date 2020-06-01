@@ -24,16 +24,13 @@ describe('get products', () => {
     // use productsfactory to create products
     await productsFactory.createMany(3);
 
-    // get counnt of all existing products
-    const productsCount = await productsFactory.productsCount();
-
     const res = await request.get('/api/v1/products?page=1');
 
     const { products } = res.body.data;
 
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('success');
-    expect(products.length).toBe(productsCount);
+    expect(products.length).toBeGreaterThan(2);
     done();
   });
 
