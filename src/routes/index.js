@@ -7,7 +7,7 @@ import {
   validate
 } from '../middleware/validator';
 import {
-  getLandingPage, registerNewUser, userSignin, getUserProfile
+  getLandingPage, registerNewUser, userSignin, getUserProfile, getUsersProducts
 } from '../controller/userController';
 import auth from '../middleware/auth';
 import { getCategories } from '../controller/utilityController';
@@ -21,5 +21,6 @@ router.post('/products/create', auth, createProductValidationRules(), validate, 
 router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
+router.get('/users/:userId/products', getUsersProducts);
 
 export default router;

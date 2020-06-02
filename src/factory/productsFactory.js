@@ -42,9 +42,39 @@ const create = async () => {
   return product.dataValues;
 };
 
+const createForUser = async (userId, number) => {
+  const createdProducts = [];
+
+  const productDetails = {
+    userId,
+    productName: 'Vgetables',
+    description: chance.word(),
+    availableQuantity: 20,
+    categoryId: 1,
+    price: 5000,
+    unit: 5
+  };
+
+  /* eslint-disable no-await-in-loop */
+  for (let index = 0; index < number; index += 1) {
+    const product = await Product.build(productDetails).save();
+    const created = product.dataValues;
+    createdProducts.push(created);
+  }
+  return createdProducts;
+};
+
+const totalUsersProduct = async (userId) => {
+  const products = await Product.count({ where: { userId } });
+
+  return products;
+};
+
 const productsCount = async () => {
   const count = await Product.count();
   return count;
 };
 
-export default { productsCount, create, createMany };
+export default {
+  productsCount, create, createMany, createForUser, totalUsersProduct
+};
