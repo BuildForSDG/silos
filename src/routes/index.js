@@ -2,7 +2,9 @@ import express from 'express';
 import {
   createProduct,
   updateProduct,
-  getProducts
+  getProducts,
+  getSingleProduct, 
+  // getUsersProducts
 } from '../controller/productsController';
 import {
   userValidationRules,
@@ -26,6 +28,7 @@ router.put('/products/:productId/update', auth, validate, updateProduct);
 router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
+router.get('/products/:productId', getSingleProduct);
 router.get('/users/:userId/products', getUsersProducts);
 
 export default router;

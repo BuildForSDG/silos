@@ -151,7 +151,7 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   let { page } = req.query;
 
-  !page || parseInt(page) <= 1 ? page = 0 : page = parseInt(page) - 1;
+  !page || parseInt(page) <= 1 ? (page = 0) : (page = parseInt(page) - 1);
 
   const limit = 30;
   const offset = Number(page * limit);
@@ -185,6 +185,200 @@ export const getProducts = async (req, res) => {
         message: 'Internal Server Error',
         error
       }
+    });
+  }
+};
+
+/**
+ * @api {get} /api/v1/products/:productId Get a single product
+ * @apiName GetProducts
+ * @apiGroup Products
+ *
+ * @apiParam {Number} product id
+ *
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *       "id": 2,
+ *       "userId": 1,
+ *       "productName": "Yam",
+ *       "description": "Tubers of New Yam",
+ *       "availableQuantity": 100,
+ *       "image": null,
+ *       "categoryId": 3,
+ *       "price": 11000,
+ *       "unit": 10,
+ *       "createdAt": "2020-06-02T10:46:39.686Z",
+ *       "updatedAt": "2020-06-02T10:46:39.686Z"
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+
+export const getSingleProduct = async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const result = await Product.findOne({ where: { id: productId } });
+
+    if (result == null) {
+      return res.status(204).json({
+        status: 'success',
+        data: {
+          message: 'Product not found'
+        }
+      });
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      data: result
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      errors: {
+        message: err.message
+      }
+    });
+  }
+  return true;
+};
+
+
+/**
+ * @api {put} /api/v1/products/update Update a product
+ * @apiName UpdateProduct
+ * @apiGroup Products
+ *
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer ae45509nlklsnkndninosndnsnndnsdlskdnllkjkjlk"
+ *     }
+ *
+ * @apiParam {String} productName Name of product
+ * @apiParam {String} description Product's brief description
+ * @apiParam {String} availableQuantity Current available quantity,
+ * @apiParam {String} image Product's Image
+ * @apiParam {String} categoryId Category Id of the product
+ * @apiParam {String} price Price per unit of the product
+ * @apiParam {String} unit Unit of the product
+ *
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Product updated successfully",
+ *     "productId": 1
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+
+export const updateProduct = async (req, res) => {
+  let uploadImage;
+  let imgUrl = null;
+  let secureUrl = null;
+
+  // Check if the user attach an image or not
+  if (req.files) {
+    uploadImage = req.files.image;
+  }
+
+  const {
+    productName, description, availableQuantity, categoryId, price, unit
+  } = req.body;
+  try {
+    const { productId } = req.params;
+    const productExists = await Product.findByPk(productId);
+    const entries = {};
+
+    if (!productExists) {
+      return res.status(422).json({
+        status: 'error',
+        errors: {
+          message: 'Product does not exist.'
+        }
+      });
+    }
+
+    if (uploadImage) {
+      // imgUrl = await cloudinary.uploader.upload(uploadImage.tempFilePath);
+
+      // Check if an image is present in the photo filed before uploading to cloudinary
+      imgUrl = cloudinary.uploader.upload(uploadImage.tempFilePath, (err, result) => {
+        if (err) {
+          return err;
+        }
+        return result;
+      });
+      secureUrl = imgUrl.secure_url;
+    }
+
+    if (productName) entries.productName = productName;
+    if (description) entries.description = description;
+    if (availableQuantity) entries.availableQuantity = availableQuantity;
+    if (uploadImage) entries.image = secureUrl;
+    if (categoryId) entries.categoryId = categoryId;
+    if (price) entries.price = price;
+    if (unit) entries.unit = unit;
+
+
+    const product = await Product.update(
+      entries,
+      {
+        where: { id: productId },
+        returning: true,
+        plain: true
+      }
+    );
+    
+    if (!product) {
+      return res.status(500).json({
+        status: 'error',
+        errors: {
+          message: 'There was an error updating the product'
+        }
+      });
+    }
+    
+    return res.status(201).json({
+      status: 'success',
+      data: {
+        message: 'Product Updated Successfully',
+        product,
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      errors: error
     });
   }
 };
