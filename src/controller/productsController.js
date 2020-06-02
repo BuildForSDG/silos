@@ -151,7 +151,7 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   let { page } = req.query;
 
-  !page || parseInt(page) <= 1 ? page = 0 : page = parseInt(page) - 1;
+  !page || parseInt(page) <= 1 ? (page = 0) : (page = parseInt(page) - 1);
 
   const limit = 30;
   const offset = Number(page * limit);
@@ -187,4 +187,33 @@ export const getProducts = async (req, res) => {
       }
     });
   }
+};
+
+export const getSingleProduct = async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const result = await Product.findOne({ where: { id: productId } });
+
+    if (result == null) {
+      return res.status(204).json({
+        status: 'success',
+        data: {
+          message: 'Product not found'
+        }
+      });
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      data: result
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      errors: {
+        message: err.message
+      }
+    });
+  }
+  return true;
 };

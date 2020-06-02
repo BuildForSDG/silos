@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProducts } from '../controller/productsController';
+import { createProduct, getProducts, getSingleProduct } from '../controller/productsController';
 import {
   userValidationRules,
   loginValidationRules,
@@ -21,5 +21,6 @@ router.post('/products/create', auth, createProductValidationRules(), validate, 
 router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
+router.get('/products/:productId', getSingleProduct);
 
 export default router;
