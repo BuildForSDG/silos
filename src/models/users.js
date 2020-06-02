@@ -49,9 +49,12 @@ export default (sequelize, DataTypes) => {
       type: Sequelize.STRING
     }
   });
-  // User.associate = function (models) {
-  //   // associations can be defined here
-  // };
+  User.associate = (models) => {
+    // associations can be defined here
+    User.hasMany(models.products, {
+      as: 'products'
+    });
+  };
 
   return User;
 };
