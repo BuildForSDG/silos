@@ -298,7 +298,7 @@ export const updateProduct = async (req, res) => {
       status: 'success',
       data: {
         message: 'Product Updated Successfully',
-        productID: product.id
+        productID: productExists.id
       }
     });
   } catch (error) {

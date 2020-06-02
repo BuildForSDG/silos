@@ -57,7 +57,7 @@ describe('Update product', () => {
 
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('success');
-    // expect(res.body.data.productID).toBe(testProductId);
+    expect(res.body.data.productID).toBe(testProductId);
     expect(res.body.data.message).toBe('Product Updated Successfully');
     done();
   });
