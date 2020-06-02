@@ -36,7 +36,7 @@ describe('get products', () => {
     // use productsfactory to create products
     await productsFactory.createMany(2);
 
-    const res = await request.get('/api/v1/products/5');
+    const res = await request.get('/api/v1/products/1225');
 
     expect(res.status).toBe(204);
     // expect(res.body.status).toBe('success');
