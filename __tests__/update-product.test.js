@@ -26,7 +26,6 @@ describe('Update product', () => {
   test('it should return status of 201 and the product id', async (done) => {
     // use productsfactory to create products
     const product = await productsFactory.create();
-    console.log(product);
     const testProductId = product.id;
 
     const productDetails = {
