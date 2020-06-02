@@ -52,11 +52,13 @@ describe('Update product', () => {
     const user = await userFactory.createUser(userDetails);
     const token = await userFactory.generateUserToken(user);
 
-    const res = await request.put(`/api/v1/products/${testProductId}`).set('Authorization', `Bearer ${token}`).send(productDetails);
+    const res = await request.put(`/api/v1/products/${testProductId}/update`).set('Authorization', `Bearer ${token}`).send(productDetails);
 
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('success');
-    expect(res.body.data.productID).toBe(testProductId);
+    expect(res.body.data.product[1].id).toBe(testProductId);
+    expect(res.body.data.product[1].productName).toBe(productDetails.productName);
+    expect(res.body.data.product[1].description).toBe(productDetails.description);
     expect(res.body.data.message).toBe('Product Updated Successfully');
     done();
   });

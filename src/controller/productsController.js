@@ -283,9 +283,12 @@ export const updateProduct = async (req, res) => {
     const product = await Product.update(
       entries,
       {
-        where: { id: productId }
+        where: { id: productId },
+        returning: true,
+        plain: true
       }
     );
+    
     if (!product) {
       return res.status(500).json({
         status: 'error',
@@ -294,11 +297,12 @@ export const updateProduct = async (req, res) => {
         }
       });
     }
+    
     return res.status(201).json({
       status: 'success',
       data: {
         message: 'Product Updated Successfully',
-        productID: productExists.id
+        product,
       }
     });
   } catch (error) {

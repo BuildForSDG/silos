@@ -22,7 +22,7 @@ router.get('/', getLandingPage);
 router.post('/auth/register', userValidationRules(), validate, registerNewUser);
 router.post('/auth/signin', loginValidationRules(), validate, userSignin);
 router.post('/products/create', auth, createProductValidationRules(), validate, createProduct);
-router.put('/products/:productId', auth, validate, updateProduct);
+router.put('/products/:productId/update', auth, validate, updateProduct);
 router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
