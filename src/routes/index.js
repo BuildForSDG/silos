@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, getProducts, getSingleProduct } from '../controller/productsController';
+import { createProduct, getProducts, getSingleProduct, getUsersProducts } from '../controller/productsController';
 import {
   userValidationRules,
   loginValidationRules,
@@ -7,7 +7,7 @@ import {
   validate
 } from '../middleware/validator';
 import {
-  getLandingPage, registerNewUser, userSignin, getUserProfile
+  getLandingPage, registerNewUser, userSignin, getUserProfile, getUsersProducts
 } from '../controller/userController';
 import auth from '../middleware/auth';
 import { getCategories } from '../controller/utilityController';
@@ -22,5 +22,6 @@ router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
 router.get('/products/:productId', getSingleProduct);
+router.get('/users/:userId/products', getUsersProducts);
 
 export default router;
