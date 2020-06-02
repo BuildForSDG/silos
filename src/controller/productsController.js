@@ -189,6 +189,46 @@ export const getProducts = async (req, res) => {
   }
 };
 
+/**
+ * @api {get} /api/v1/products/:productId Get a single product
+ * @apiName GetProducts
+ * @apiGroup Products
+ *
+ * @apiParam {Number} product id
+ *
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *       "id": 2,
+ *       "userId": 1,
+ *       "productName": "Yam",
+ *       "description": "Tubers of New Yam",
+ *       "availableQuantity": 100,
+ *       "image": null,
+ *       "categoryId": 3,
+ *       "price": 11000,
+ *       "unit": 10,
+ *       "createdAt": "2020-06-02T10:46:39.686Z",
+ *       "updatedAt": "2020-06-02T10:46:39.686Z"
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+
 export const getSingleProduct = async (req, res) => {
   const { productId } = req.params;
   try {
