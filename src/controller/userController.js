@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import sequelize from '../config/sequelize';
 
 const User = sequelize.import('../models/users');
+const Product = sequelize.import('../models/products');
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_KEY,
@@ -368,8 +369,92 @@ export const getUserProfile = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       status: 'error',
-      error: {
+      errors: {
         message: 'Internal Server error',
+        error
+      }
+    });
+  }
+};
+
+
+/**
+ * @api {get} /api/v1/users/userId/products?page=1 Get users products
+ * @apiName GetUsersProducts
+ * @apiGroup User
+ *
+ * @apiParam {String} page current page to display
+ *
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Product fetched successfully",
+ *     "products": [],
+ *     "rowsPerPage": 50,
+ *     "currentPage": 1,
+ *      "totalProducts": 200
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+/* eslint-disable radix */
+/* eslint-disable no-unused-expressions */
+export const getUsersProducts = async (req, res) => {
+  let { page } = req.query;
+  const { userId } = req.params;
+
+  !page || parseInt(page) <= 1 ? page = 0 : page = parseInt(page) - 1;
+
+  const limit = 30;
+  const offset = Number(page * limit);
+
+  try {
+    const products = await Product.findAndCountAll({
+      where: {
+        userId
+      },
+      offset,
+      limit
+    });
+
+    if (products) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Product feched successfully',
+          products: products.rows,
+          currentPage: page + 1,
+          rowsPerPage: limit,
+          totalProducts: products.count
+        }
+      });
+    }
+
+    return res.status(404).json({
+      status: 'error',
+      errors: {
+        message: 'No Products Found'
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      errors: {
+        message: 'Internal Server Error',
         error
       }
     });

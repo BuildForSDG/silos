@@ -1,6 +1,6 @@
 barebones setup for JavaScript / Node projects replace this with a one-liner phrase describing this project or app
 
-[![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b562338c37b419899e6aef6454682f2)](https://app.codacy.com/gh/BuildForSDG/silos?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/silos&utm_campaign=Badge_Grade_Settings)
 
 
 ## About
@@ -37,6 +37,7 @@ Migrations are saved in the /src/migrations folder
 - Create a migration and model with `$ sequelize model:generate --name Test2 --attributes firstName:string,lastName:string,email:string`
 - Run all migrations with `$ sequelize db:migrate --env development`
 - Rollback all migrations with `$ sequelize db:migrate:undo:all --env development`
+- Run database seed with `$ sequelize-cli db:seed:all`
 Always specify the environments
 
 #### Hints

@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import http from 'http';
 import Chance from 'chance';
-import path from 'path';
+// import path from 'path';
 import app from '../src/app';
 import userFactory from '../src/factory/userFactory';
 import productsFactory from '../src/factory/productsFactory';
@@ -151,34 +151,38 @@ describe('User Registration Test', () => {
     done();
   });
 
-  test('it should create the product with an image and return the product_id', async (done) => {
-    const userDetails = {
-      firstName: chance.first(),
-      lastName: chance.last(),
-      email: chance.email(),
-      password: 'dhye%$&6*',
-      phoneNumber: chance.phone(),
-      userType: 'producer',
-      businessName: chance.name(),
-      bio: chance.sentence(),
-      address: chance.address()
-    };
-    const filePath = await path.join(__dirname, './testImage/how-to-sell-farm-products-in-nigeria.jpg');
+  // you can always comment out this test to prevent uploading image on every test
 
-    const user = await userFactory.createUser(userDetails);
-    const token = await userFactory.generateUserToken(user);
+  // test('it should create the product with an image and return the product_id', async (done) => {
+  //   const userDetails = {
+  //     firstName: chance.first(),
+  //     lastName: chance.last(),
+  //     email: chance.email(),
+  //     password: 'dhye%$&6*',
+  //     phoneNumber: chance.phone(),
+  //     userType: 'producer',
+  //     businessName: chance.name(),
+  //     bio: chance.sentence(),
+  //     address: chance.address()
+  //   };
+  //   const filePath = await path.join(__dirname,
+  //    './testImage/how-to-sell-farm-products-in-nigeria.jpg');
 
-    const productsBeforeRequest = await productsFactory.productsCount();
+  //   const user = await userFactory.createUser(userDetails);
+  //   const token = await userFactory.generateUserToken(user);
 
-    const res = await request.post(url).set('Authorization', `Bearer ${token}`).field(productDetails).attach('image', `${filePath}`);
+  //   const productsBeforeRequest = await productsFactory.productsCount();
 
-    const productsAfterRequest = await productsFactory.productsCount();
+  //   const res = await request.post(url).set('Authorization',
+  //      `Bearer ${token}`).field(productDetails).attach('image', `${filePath}`);
 
-    expect(res.statusCode).toEqual(201);
-    expect(res.body.status).toBe('success');
-    expect(productsBeforeRequest).toBe(productsAfterRequest - 1);
-    expect(res.body.data).toHaveProperty('productId', res.body.data.productId);
-    expect(res.body.data.image).not.toBeNull();
-    done();
-  });
+  //   const productsAfterRequest = await productsFactory.productsCount();
+
+  //   expect(res.statusCode).toEqual(201);
+  //   expect(res.body.status).toBe('success');
+  //   expect(productsBeforeRequest).toBe(productsAfterRequest - 1);
+  //   expect(res.body.data).toHaveProperty('productId', res.body.data.productId);
+  //   expect(res.body.data.image).not.toBeNull();
+  //   done();
+  // });
 });

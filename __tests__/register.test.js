@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import http from 'http';
-import path from 'path';
+// import path from 'path';
 import Chance from 'chance';
 import app from '../src/app';
 import userFactory from '../src/factory/userFactory';
@@ -78,27 +78,28 @@ describe('User Registration Test', () => {
 
   // you can comment out test to prevent upload of image at every test
 
-  test('it should register a new user to the database with an image', async (done) => {
-    // Get path to sample image stored in testImage folder
-    const filePath = await path.join(__dirname, './testImage/testImage.jpg');
-    const newUser = {
-      firstName: chance.first(),
-      lastName: chance.last(),
-      email: chance.email(),
-      password: 'hashed',
-      phoneNumber: '0987657',
-      userType: 'Producer',
-      businessName: 'My Biz Name',
-      bio: 'My Biography',
-      address: 'FT Abuja, Nigeria'
-    };
+  // test('it should register a new user to the database with an image', async (done) => {
+  //   // Get path to sample image stored in testImage folder
+  //   const filePath = await path.join(__dirname, './testImage/testImage.jpg');
+  //   const newUser = {
+  //     firstName: chance.first(),
+  //     lastName: chance.last(),
+  //     email: chance.email(),
+  //     password: 'hashed',
+  //     phoneNumber: '0987657',
+  //     userType: 'Producer',
+  //     businessName: 'My Biz Name',
+  //     bio: 'My Biography',
+  //     address: 'FT Abuja, Nigeria'
+  //   };
 
-    const result = await request.post('/api/v1/auth/register').field(newUser).attach('photo', `${filePath}`);
-    expect(result.statusCode).toEqual(201);
-    expect(result.body.status).toBe('success');
-    expect(result.body.data).toHaveProperty('userId', result.body.data.userId);
-    done();
-  });
+  //   const result = await request.post('/api/v1/auth/register').
+  //                  field(newUser).attach('photo', `${filePath}`);
+  //   expect(result.statusCode).toEqual(201);
+  //   expect(result.body.status).toBe('success');
+  //   expect(result.body.data).toHaveProperty('userId', result.body.data.userId);
+  //   done();
+  // });
 
   const newUser = {
     firstName: chance.first(),

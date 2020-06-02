@@ -13,7 +13,7 @@
     "test": "__tests__"
   },
   "scripts": {
-    "test": "sequelize db:migrate --env test && jest --detectOpenHandles && sequelize db:migrate:undo:all --env test",
+    "test": "sequelize db:migrate --env test && sequelize db:seed:all --env test && jest --detectOpenHandles && sequelize db:seed:undo --env test && sequelize db:migrate:undo:all --env test",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
     "lint": "eslint \"src/**/*.js\" .",
@@ -23,7 +23,8 @@
     "docs": "apidoc -i src/ -o docs/",
     "migrate": "sequelize db:migrate --env development",
     "test-migrate": "sequelize db:migrate --env test",
-    "test-migrate-rollback": "sequelize db:migrate:undo:all --env test"
+    "test-migrate-rollback": "sequelize db:migrate:undo:all --env test",
+    "test-run-seed": "sequelize db:seed:all --env test"
   },
   "husky": {
     "hooks": {

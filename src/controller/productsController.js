@@ -105,7 +105,86 @@ export const createProduct = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: 'error',
-      errors: error
+      errors: {
+        message: 'internal Server Error',
+        error
+      }
+    });
+  }
+};
+
+/**
+ * @api {get} /api/v1/products?page=1 Get all products
+ * @apiName GetProducts
+ * @apiGroup Products
+ *
+ * @apiParam {String} page current page to display
+ *
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 201 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Product fetched successfully",
+ *     "products": [],
+ *     "rowsPerPage": 50,
+ *     "currentPage": 1,
+ *      "totalProducts": 200
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+/* eslint-disable radix */
+/* eslint-disable no-unused-expressions */
+export const getProducts = async (req, res) => {
+  let { page } = req.query;
+
+  !page || parseInt(page) <= 1 ? page = 0 : page = parseInt(page) - 1;
+
+  const limit = 30;
+  const offset = Number(page * limit);
+
+  try {
+    const products = await Product.findAndCountAll({ offset, limit });
+
+    if (products) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Product query Successful',
+          products: products.rows,
+          currentPage: page + 1,
+          rowsPerPage: limit,
+          totalProducts: products.count
+        }
+      });
+    }
+
+    return res.status(404).json({
+      status: 'error',
+      errors: {
+        message: 'No Products Found'
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      errors: {
+        message: 'Internal Server Error',
+        error
+      }
     });
   }
 };

@@ -1,7 +1,8 @@
 import express from 'express';
 import {
   createProduct,
-  updateProduct
+  updateProduct,
+  getProducts
 } from '../controller/productsController';
 import {
   userValidationRules,
@@ -10,9 +11,10 @@ import {
   validate
 } from '../middleware/validator';
 import {
-  getLandingPage, registerNewUser, userSignin, getUserProfile
+  getLandingPage, registerNewUser, userSignin, getUserProfile, getUsersProducts
 } from '../controller/userController';
 import auth from '../middleware/auth';
+import { getCategories } from '../controller/utilityController';
 
 const router = express.Router();
 
@@ -22,5 +24,8 @@ router.post('/auth/signin', loginValidationRules(), validate, userSignin);
 router.post('/products/create', auth, createProductValidationRules(), validate, createProduct);
 router.put('/products/:productId', auth, validate, updateProduct);
 router.get('/users/:userId', auth, getUserProfile);
+router.get('/categories', getCategories);
+router.get('/products', getProducts);
+router.get('/users/:userId/products', getUsersProducts);
 
 export default router;
