@@ -3,7 +3,8 @@ import {
   createProduct,
   updateProduct,
   getProducts,
-  getSingleProduct, 
+  getSingleProduct,
+  deleteProduct,
   // getUsersProducts
 } from '../controller/productsController';
 import {
@@ -25,6 +26,7 @@ router.post('/auth/register', userValidationRules(), validate, registerNewUser);
 router.post('/auth/signin', loginValidationRules(), validate, userSignin);
 router.post('/products/create', auth, createProductValidationRules(), validate, createProduct);
 router.put('/products/:productId/update', auth, validate, updateProduct);
+router.delete('/products/:productId/delete', auth, validate, deleteProduct);
 router.get('/users/:userId', auth, getUserProfile);
 router.get('/categories', getCategories);
 router.get('/products', getProducts);
