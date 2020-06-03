@@ -258,7 +258,6 @@ export const getSingleProduct = async (req, res) => {
   return true;
 };
 
-
 /**
  * @api {put} /api/v1/products/update Update a product
  * @apiName UpdateProduct
@@ -373,6 +372,81 @@ export const updateProduct = async (req, res) => {
       data: {
         message: 'Product Updated Successfully',
         product,
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      errors: error
+    });
+  }
+};
+
+/**
+ * @api {delete} /api/v1/products/:productId/delete Delete a product
+ * @apiName DeleteProduct
+ * @apiGroup Products
+ *
+ * @apiHeaderExample {json} Header-Example:
+ *     {
+ *       "Authorization": "Bearer ae45509nlklsnkndninosndnsnndnsdlskdnllkjkjlk"
+ *     }
+ *
+ * @apiSuccessExample Success Response
+ * HTTP/1.1 200 OK
+ * {
+ *   "status": "success",
+ *  "data": {
+ *     "message": "Product deleted successfully",
+ *     "productId": 1
+ *   }
+ * }
+ *
+ * @apiError Internal Server Error
+ *
+ * @apiErrorExample Error Response:
+ * HTTP/1.1 500 Server error
+ * {
+ *    "status": "error",
+ *    "errors": {
+ *      "message":"error message"
+ *    }
+ * }
+ *
+ */
+
+export const deleteProduct = async (req, res) => {
+ 
+  try {
+    const { productId } = req.params;
+    const productExists = await Product.findByPk(productId);
+
+    if (!productExists) {
+      return res.status(422).json({
+        status: 'error',
+        errors: {
+          message: 'Product does not exist.'
+        }
+      });
+    }
+    
+    const product = await Product.destroy({
+      where: { id: productId },
+    });
+    
+    if (!product) {
+      return res.status(500).json({
+        status: 'error',
+        errors: {
+          message: 'There was an error deleting the product'
+        }
+      });
+    }
+    
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'Product Deleted Successfully',
       }
     });
   } catch (error) {
