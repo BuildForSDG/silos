@@ -1,6 +1,6 @@
 barebones setup for JavaScript / Node projects replace this with a one-liner phrase describing this project or app
 
-[![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b562338c37b419899e6aef6454682f2)](https://app.codacy.com/gh/BuildForSDG/silos?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/silos&utm_campaign=Badge_Grade_Settings)
 
 
 ## About
@@ -31,6 +31,15 @@ All tests should be written in the `__tests__' folder. There's a sample in there
 
 This starter uses [Parcel](https://parceljs.org/getting_started.html) as the bundler. It is much simpler that WebPack and the others
 
+## Migrations
+
+Migrations are saved in the /src/migrations folder
+- Create a migration and model with `$ sequelize model:generate --name Test2 --attributes firstName:string,lastName:string,email:string`
+- Run all migrations with `$ sequelize db:migrate --env development`
+- Rollback all migrations with `$ sequelize db:migrate:undo:all --env development`
+- Run database seed with `$ sequelize-cli db:seed:all`
+Always specify the environments
+
 #### Hints
 
 - Run `npm install` or `yarn install` to get started. We'll assume you are using Yarn.
@@ -38,11 +47,12 @@ This starter uses [Parcel](https://parceljs.org/getting_started.html) as the bun
 - Run tests: `yarn test`
 - Run tests with test coverage info: `yarn test:cover`
 - Check the codebase for proper syntax and formatting compliance: `yarn lint`
-- Run your app in local dev mode: `yarn start`. This puts the bundled app in a `dist` folder, set up a local web server at localhost:1234, and continues to watch for your code changes which it syncs with the local server. This means if you loaded the app in a browser, it will auto-refresh as you code along. Feel free to use whatever bundler best meets your needs. Parcel was only added as a sample and for those looking for a simple but effective solution to the hassle of bundlers. 
+- Run your app in local dev mode: `yarn dev`. 
 
 ## Authors
 
 - Godwin Otokina (Technical Team Lead) https://github.com/wincodes https://twitter.com/GodwinOtokina
+- Manasseh Omachonu https://github.com/manaraph https://twitter.com/manaraph225
 -
 
 ## Contributing

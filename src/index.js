@@ -1,11 +1,8 @@
+import {} from 'dotenv/config';
 import app from './app';
 
-const startApp = async () => {
-  const header = document.querySelector('[data-app-name]');
-  if (!header) return;
+// setup the port
+const port = process.env.NODE_ENV === 'test' ? process.env.TEST_PORT : process.env.PORT;
 
-  const programName = await app();
-  header.textContent = programName;
-};
-
-document.addEventListener('DOMContentLoaded', startApp);
+// start the server
+app.listen(port, () => console.log(`server started at Port ${port}`)); // eslint-disable-line no-console

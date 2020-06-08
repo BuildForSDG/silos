@@ -4,7 +4,7 @@ import app from '../src/app';
 
 process.env.NODE_ENV = 'test';
 
-describe('basic test', () => {
+describe('get categories test', () => {
   let server;
   let request;
 
@@ -20,17 +20,17 @@ describe('basic test', () => {
   });
 
   test('it should return status of 200', async (done) => {
-    const res = await request.get('/api/v1');
+    const res = await request.get('/api/v1/categories');
 
     expect(res.status).toBe(200);
     done();
   });
 
-  test('it returns project name', async (done) => {
-    const res = await request.get('/api/v1');
+  test('it returns the categories', async (done) => {
+    const res = await request.get('/api/v1/categories');
 
     expect(res.body.status).toBe('success');
-    expect(res.body.data.message).toBe('BuildForSdg Silos Api');
+    expect(res.body.data.categories).not.toBeNull();
     done();
   });
 });
